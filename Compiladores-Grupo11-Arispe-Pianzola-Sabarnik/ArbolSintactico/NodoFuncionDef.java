@@ -41,7 +41,14 @@ public class NodoFuncionDef extends Nodo {
         this.atributosFuncion.setMangledName(mangledName);
         AnalizadorLexico.tablaSimbolos.put(mangledName, this.atributosFuncion);
         
-        TdA.abrirAmbito(this.nombre); 
+        TdA.abrirAmbito(this.nombre);
+        String salidaCuerpo = Capturador.capturarSalida(() -> this.cuerpo.imprimir(""));
+        if (!this.tiposRetorno.isEmpty() &&
+        		!salidaCuerpo.toUpperCase().contains("return".toUpperCase())) {
+            System.err.println("ERROR SEMANTICO: la funcion " + this.nombre + " no tiene un retorno especificado.");
+            return "error";
+        }
+        
         if (parametros != null) {
             for (NodoParametro p : parametros) {
                 p.chequear(TdA); 

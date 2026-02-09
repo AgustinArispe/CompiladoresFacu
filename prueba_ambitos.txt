@@ -10,7 +10,6 @@ PROGRAMA {
         print("Variable local dentro:");
         print(VAR%LOCAL);
         
-        return (VAR%LOCAL, 0.0);
     }
 
     long R1;
@@ -19,5 +18,6 @@ PROGRAMA {
     R1, R2 = FUNC%TEST%SCOPE();
 
     print("Intentando acceder a variable local desde fuera...");
+
     print(VAR%LOCAL); 
 }

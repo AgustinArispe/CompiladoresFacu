@@ -1,0 +1,5 @@
+PROGRAMA {
+    long A;
+    A := 10L;
+    print(A);
+}

@@ -16,10 +16,10 @@ _aux_long DD ?
 _aux_dfloat DQ ?
 
 ; --- Variables y Constantes del Programa ---
-_A_es_mayor_a_5 DB "A es mayor a 5", 0
 _A_es_menor_a_5 DB "A es menor a 5", 0
-_A_PROGRAMA DD ?
 _A_NO_es_menor_a_5 DB "A NO es menor a 5", 0
+_A_es_mayor_a_5 DB "A es mayor a 5", 0
+_A_PROGRAMA DD ?
 _A_NO_es_mayor_a_5 DB "A NO es mayor a 5", 0
 ; --- Fin Variables y Constantes ---
 

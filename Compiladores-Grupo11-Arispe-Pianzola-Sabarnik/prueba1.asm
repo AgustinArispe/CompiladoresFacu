@@ -16,34 +16,16 @@ _aux_long DD ?
 _aux_dfloat DQ ?
 
 ; --- Variables y Constantes del Programa ---
-_ERROR__Si_ves_este_mensaje__el_control_de_errores_fallo_ DB "ERROR: Si ves este mensaje, el control de errores fallo.", 0
-_RES_ERROR DD ?
-____Test_de_Error_en_Tiempo_de_Ejecucion____ DB "--- Test de Error en Tiempo de Ejecucion ---", 0
-_Intentando_dividir_por_cero___ DB "Intentando dividir por cero...", 0
-_DENOM_ERROR DD ?
-_NUM_ERROR DD ?
+_A_PROGRAMA DD ?
 ; --- Fin Variables y Constantes ---
 
 
 .CODE
 START:
 FINIT
-invoke printf, ADDR _format_string, ADDR ____Test_de_Error_en_Tiempo_de_Ejecucion____
-MOV EAX, 100
-MOV _NUM_ERROR, EAX
-MOV EAX, 0
-MOV _DENOM_ERROR, EAX
-invoke printf, ADDR _format_string, ADDR _Intentando_dividir_por_cero___
-MOV EAX, _DENOM_ERROR
-MOV EBX, EAX
-MOV EAX, _NUM_ERROR
-CMP EBX, 0
-JE _ERROR_DIV_CERO
-CDQ
-IDIV EBX
-MOV EAX, EAX
-MOV _RES_ERROR, EAX
-invoke printf, ADDR _format_string, ADDR _ERROR__Si_ves_este_mensaje__el_control_de_errores_fallo_
+MOV EAX, 10
+MOV _A_PROGRAMA, EAX
+invoke printf, ADDR _format_long, _A_PROGRAMA
 
 ; --- Fin del programa principal ---
 invoke ExitProcess, 0

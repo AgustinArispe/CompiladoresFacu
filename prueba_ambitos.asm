@@ -16,48 +16,50 @@ _aux_long DD ?
 _aux_dfloat DQ ?
 
 ; --- Variables y Constantes del Programa ---
-_0_0 DQ 0.0
-_R2_PROGRAMA DQ ?
-_R1_PROGRAMA DD ?
-_Iniciando_prueba_de_argumentos_incorrectos___ DB "Iniciando prueba de argumentos incorrectos...", 0
-_P_LONG_PROGRAMA_FUNC_TEST_ARGS DD ?
-_1_5 DQ 1.5
-_IN_FUNC__FUNC_TEST_ARGS_PROGRAMA DB 0
-_RET_0__FUNC_TEST_ARGS_PROGRAMA DD ?
-_RET_1__FUNC_TEST_ARGS_PROGRAMA DQ ?
+_IN_FUNC__FUNC_TEST_SCOPE_PROGRAMA DB 0
+_RET_0__FUNC_TEST_SCOPE_PROGRAMA DD ?
+_RET_1__FUNC_TEST_SCOPE_PROGRAMA DQ ?
+_R1_PROGRAMA_FUNC_TEST_SCOPE DD ?
+_R2_PROGRAMA_FUNC_TEST_SCOPE DQ ?
+_Variable_local_dentro_ DB "Variable local dentro:", 0
+_Intentando_acceder_a_variable_local_desde_fuera___ DB "Intentando acceder a variable local desde fuera...", 0
+_VAR_GLOBAL_PROGRAMA DD ?
 ; --- Fin Variables y Constantes ---
 
 
 .CODE
 
-; --- Definicion de Funcion: FUNC%TEST%ARGS ---
-_FUNC_TEST_ARGS_PROGRAMA PROC
+; --- Definicion de Funcion: FUNC%TEST%SCOPE ---
+_FUNC_TEST_SCOPE_PROGRAMA PROC
 push ebp
 mov ebp, esp
 push edi
 push esi
-invoke printf, ADDR _format_long, _P_LONG_PROGRAMA_FUNC_TEST_ARGS
-MOV EAX, _P_LONG_PROGRAMA_FUNC_TEST_ARGS
-MOV _RET_0__FUNC_TEST_ARGS_PROGRAMA, EAX
-FLD _0_0
-FSTP _RET_1__FUNC_TEST_ARGS_PROGRAMA
-JMP _FUNC_TEST_ARGS_PROGRAMA_exit
-_FUNC_TEST_ARGS_PROGRAMA_exit:
+invoke printf, ADDR _format_string, ADDR _Variable_local_dentro_
+_FUNC_TEST_SCOPE_PROGRAMA_exit:
 pop esi
 pop edi
 mov esp, ebp
 pop ebp
 RET
-_FUNC_TEST_ARGS_PROGRAMA ENDP
-; --- Fin de Funcion: FUNC%TEST%ARGS ---
+_FUNC_TEST_SCOPE_PROGRAMA ENDP
+; --- Fin de Funcion: FUNC%TEST%SCOPE ---
 
 START:
 FINIT
-invoke printf, ADDR _format_string, ADDR _Iniciando_prueba_de_argumentos_incorrectos___
-MOV EAX, _RET_0__FUNC_TEST_ARGS_PROGRAMA
-MOV _R1_PROGRAMA, EAX
-FLD _RET_1__FUNC_TEST_ARGS_PROGRAMA
-FSTP _R2_PROGRAMA
+; Chequeo de recursion (h)
+CMP _IN_FUNC__FUNC_TEST_SCOPE_PROGRAMA, 1
+JE _ERROR_RECURSION
+MOV _IN_FUNC__FUNC_TEST_SCOPE_PROGRAMA, 1
+CALL _FUNC_TEST_SCOPE_PROGRAMA
+MOV _IN_FUNC__FUNC_TEST_SCOPE_PROGRAMA, 0
+MOV EAX, _RET_0__FUNC_TEST_SCOPE_PROGRAMA
+MOV _aux_long, EAX
+MOV EAX, _RET_0__FUNC_TEST_SCOPE_PROGRAMA
+MOV _R1_PROGRAMA_FUNC_TEST_SCOPE, EAX
+FLD _RET_1__FUNC_TEST_SCOPE_PROGRAMA
+FSTP _R2_PROGRAMA_FUNC_TEST_SCOPE
+invoke printf, ADDR _format_string, ADDR _Intentando_acceder_a_variable_local_desde_fuera___
 
 ; --- Fin del programa principal ---
 invoke ExitProcess, 0

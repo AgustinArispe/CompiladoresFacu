@@ -73,6 +73,10 @@ public class NodoAsignacion extends Nodo {
                 System.err.println("ERROR Semantico: Asignacion incompatible... (posible perdida de datos) al asignar a '" + nombreVar + "'.");
                 return "error";
             }
+            System.out.print("TipoExpr" + tipoExpr);
+            if (tipoExpr.equals("void")) {
+                System.err.println("ERROR Semantico: Asignacion incompatible... (posible perdida de datos) al asignar a '" + nombreVar + "'.");
+            }
             return tipoVar;
         }
     }

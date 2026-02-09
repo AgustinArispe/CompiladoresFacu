@@ -29,15 +29,29 @@ public class TablaDeAmbitos {
         }
         return mangled.toString(); 
     }
+
+
     public boolean agregar(String nombreSimple, AtributosTokens atributos) {
-        String mangledName = nombreSimple + this.getMangledScope();
-        if (this.tablaDeSimbolos.containsKey(mangledName)) {
-            return false; 
+            String mangledName = nombreSimple + this.getMangledScope();
+            
+            if (this.tablaDeSimbolos.containsKey(mangledName)) {
+                return false; 
+            }
+
+            atributos.setMangledName(mangledName); 
+            
+            this.tablaDeSimbolos.put(mangledName, atributos);
+
+            if (this.tablaDeSimbolos.containsKey(nombreSimple)) {
+                this.tablaDeSimbolos.remove(nombreSimple);
+            }
+            
+            return true;
         }
-        this.tablaDeSimbolos.put(mangledName, atributos);
-        atributos.setMangledName(mangledName); 
-        return true;
-    }
+
+
+
+        
     public AtributosTokens buscar(String nombreSimple) {
         if (pilaAmbitos.isEmpty()) {
             return null;
