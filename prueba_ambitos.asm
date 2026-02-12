@@ -19,10 +19,12 @@ _aux_dfloat DQ ?
 _IN_FUNC__FUNC_TEST_SCOPE_PROGRAMA DB 0
 _RET_0__FUNC_TEST_SCOPE_PROGRAMA DD ?
 _RET_1__FUNC_TEST_SCOPE_PROGRAMA DQ ?
-_R1_PROGRAMA_FUNC_TEST_SCOPE DD ?
-_R2_PROGRAMA_FUNC_TEST_SCOPE DQ ?
+_R2_PROGRAMA DQ ?
+_VAR_LOCAL_PROGRAMA_FUNC_TEST_SCOPE DD ?
 _Variable_local_dentro_ DB "Variable local dentro:", 0
 _Intentando_acceder_a_variable_local_desde_fuera___ DB "Intentando acceder a variable local desde fuera...", 0
+_0_0 DQ 0.0
+_R1_PROGRAMA DD ?
 _VAR_GLOBAL_PROGRAMA DD ?
 ; --- Fin Variables y Constantes ---
 
@@ -35,7 +37,15 @@ push ebp
 mov ebp, esp
 push edi
 push esi
+MOV EAX, 99
+MOV _VAR_LOCAL_PROGRAMA_FUNC_TEST_SCOPE, EAX
 invoke printf, ADDR _format_string, ADDR _Variable_local_dentro_
+invoke printf, ADDR _format_long, _VAR_LOCAL_PROGRAMA_FUNC_TEST_SCOPE
+MOV EAX, _VAR_LOCAL_PROGRAMA_FUNC_TEST_SCOPE
+MOV _RET_0__FUNC_TEST_SCOPE_PROGRAMA, EAX
+FLD _0_0
+FSTP _RET_1__FUNC_TEST_SCOPE_PROGRAMA
+JMP _FUNC_TEST_SCOPE_PROGRAMA_exit
 _FUNC_TEST_SCOPE_PROGRAMA_exit:
 pop esi
 pop edi
@@ -56,9 +66,9 @@ MOV _IN_FUNC__FUNC_TEST_SCOPE_PROGRAMA, 0
 MOV EAX, _RET_0__FUNC_TEST_SCOPE_PROGRAMA
 MOV _aux_long, EAX
 MOV EAX, _RET_0__FUNC_TEST_SCOPE_PROGRAMA
-MOV _R1_PROGRAMA_FUNC_TEST_SCOPE, EAX
+MOV _R1_PROGRAMA, EAX
 FLD _RET_1__FUNC_TEST_SCOPE_PROGRAMA
-FSTP _R2_PROGRAMA_FUNC_TEST_SCOPE
+FSTP _R2_PROGRAMA
 invoke printf, ADDR _format_string, ADDR _Intentando_acceder_a_variable_local_desde_fuera___
 
 ; --- Fin del programa principal ---
