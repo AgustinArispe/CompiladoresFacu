@@ -10,6 +10,9 @@ public abstract class Nodo {
     
     public abstract void imprimir(String prefijo);
 
+    public boolean tieneReturn() {
+    return false; 
+}
     
     public abstract String generarCodigo(GeneradorAssembler G, TablaDeAmbitos TdA); 
 }

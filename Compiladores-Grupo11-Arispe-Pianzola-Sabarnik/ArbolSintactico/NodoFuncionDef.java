@@ -34,29 +34,48 @@ public class NodoFuncionDef extends Nodo {
     public void setCuerpo(NodoBloque cuerpo) {
         this.cuerpo = cuerpo;
     }
-    
+
     @Override
     public String chequear(TablaDeAmbitos TdA) {
-        String mangledName = this.nombre + TdA.getMangledScope(); 
-        this.atributosFuncion.setMangledName(mangledName);
-        AnalizadorLexico.tablaSimbolos.put(mangledName, this.atributosFuncion);
+        String mangledName = this.nombre + TdA.getMangledScope();
         
-        TdA.abrirAmbito(this.nombre);
-        String salidaCuerpo = Capturador.capturarSalida(() -> this.cuerpo.imprimir(""));
-        if (!this.tiposRetorno.isEmpty() &&
-        		!salidaCuerpo.toUpperCase().contains("return".toUpperCase())) {
-            System.err.println("ERROR SEMANTICO: la funcion " + this.nombre + " no tiene un retorno especificado.");
-            return "error";
+        if (AnalizadorLexico.tablaSimbolos.containsKey(mangledName)) {
+            String msg = "ERROR Semantico: La funcion '" + this.nombre + "' ya fue declarada en este ambito.";
+            System.err.println(msg);
+            AnalizadorLexico.errores_y_warnings.add(msg);
         }
+
+        this.atributosFuncion.setMangledName(mangledName);
+        this.atributosFuncion.setUso("funcion"); // Aseguramos que sepa que es función
+        AnalizadorLexico.tablaSimbolos.put(mangledName, this.atributosFuncion);
+
+        if (AnalizadorLexico.tablaSimbolos.containsKey(this.nombre)) {
+            AnalizadorLexico.tablaSimbolos.remove(this.nombre);
+        }
+
+        TdA.abrirAmbito(this.nombre);
         
         if (parametros != null) {
             for (NodoParametro p : parametros) {
                 p.chequear(TdA); 
             }
         }
+
+        // 6. Chequeamos el cuerpo de la función
         cuerpo.chequear(TdA);
+        
+        // 7. VALIDACIÓN DE RETORNO (La lógica que agregamos hoy)
+        // Verificamos que existan returns en todos los flujos de ejecución.
+        if (!this.cuerpo.tieneReturn()) {
+            String msg = "ERROR Semantico: La funcion '" + this.nombre + "' debe retornar un valor en todos sus posibles flujos de ejecucion.";
+            System.err.println(msg);
+            AnalizadorLexico.errores_y_warnings.add(msg);
+        }
+
+        // 8. Cerramos el ámbito
         TdA.cerrarAmbito(); 
-        return "void";
+        
+        return "void"; // O el tipo de retorno real si lo tienes en los atributos
     }
     
     @Override

@@ -30,6 +30,10 @@ public class NodoDoUntil extends Nodo {
         condicion.imprimir(prefijo + "    ");
     }
 
+    @Override
+    public boolean tieneReturn() {
+        return this.bloque.tieneReturn();
+    }
     
     @Override
     public String generarCodigo(GeneradorAssembler G, TablaDeAmbitos TdA) {

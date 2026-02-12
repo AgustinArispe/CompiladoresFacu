@@ -18,6 +18,15 @@ public class NodoBloque extends Nodo {
         }
     }
     
+    @Override
+    public boolean tieneReturn() {
+        for (Nodo sentencia : this.sentencias) {
+            if (sentencia.tieneReturn()) {
+                return true;
+            }
+        }
+        return false;
+    }
     
     public ArrayList<Nodo> getSentencias() {
         return this.sentencias;

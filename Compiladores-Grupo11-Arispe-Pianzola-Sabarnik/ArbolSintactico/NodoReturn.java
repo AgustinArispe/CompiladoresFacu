@@ -14,6 +14,11 @@ public class NodoReturn extends Nodo {
     }
     
     @Override
+    public boolean tieneReturn() {
+        return true; 
+    }
+
+    @Override
     public String chequear(TablaDeAmbitos TdA) {
         
         List<String> tiposEsperados = funcionContenedora.getTiposRetorno();

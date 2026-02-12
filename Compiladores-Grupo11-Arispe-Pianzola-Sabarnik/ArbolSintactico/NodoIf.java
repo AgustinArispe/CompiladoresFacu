@@ -26,6 +26,17 @@ public class NodoIf extends Nodo {
     }
     
     @Override
+    public boolean tieneReturn() {
+        // Si no tiene rama ELSE, no podemos asegurar que retorne siempre (porque la condición puede ser falsa).
+        if (this.bloqueFalse == null) {
+            return false;
+        }
+        
+        // Para asegurar retorno, DEBE haber return en el TRUE *Y* en el FALSE.
+        return this.bloqueTrue.tieneReturn() && this.bloqueFalse.tieneReturn();
+    }
+
+    @Override
     public void imprimir(String prefijo) {
         
         System.out.println(prefijo + "Sentencia IF");
